@@ -1,6 +1,9 @@
 function FindProxyForURL(url, host)
 {
-  if (dnsDomainIs(host, "kinozal.tv"))
+  if (
+    dnsDomainIs(host, "kinozal.tv")
+    || dnsDomainIs(host, "rutracker.org")
+  )
     return "PROXY 10.100.100.41:1080";
   return "DIRECT";
 }
