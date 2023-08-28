@@ -5,6 +5,7 @@ function FindProxyForURL(url, host)
     || dnsDomainIs(host, "rutracker.org")
     || dnsDomainIs(host, "licdn.com")
     || dnsDomainIs(host, "linkedin.com")
+    || dnsDomainIs(host, "lostfilm.tv")
   )
     return "PROXY 10.100.100.41:1080";
   return "DIRECT";
