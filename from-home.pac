@@ -9,8 +9,8 @@ function FindProxyForURL(url, host)
     || dnsDomainIs(host, "linkedin.com")
     || dnsDomainIs(host, "lostfilm.tv")
   )
-    if (isInNet(myIp, "10.100.100.0", "255.255.255.0")) 
-      return "PROXY 10.100.100.41:1080";
+//    if (isInNet(myIp, "10.100.100.0", "255.255.255.0")) 
+//      return "PROXY 10.100.100.41:1080";
 //    else
 //      return "PROXY 127.0.0.1:10809";
 
