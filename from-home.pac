@@ -1,18 +1,89 @@
-function FindProxyForURL(url, host)
-{
-  // var privateIP = /^(0|10|127|192\.168|172\.1[6789]|172\.2[0-9]|172\.3[01]|169\.254|192\.88\.99)\.[0-9.]+$/;
-	var myIp = myIpAddress();
-  if (
-    dnsDomainIs(host, "kinozal.tv")
-    || dnsDomainIs(host, "rutracker.org")
-    || dnsDomainIs(host, "licdn.com")
-    || dnsDomainIs(host, "linkedin.com")
-    || dnsDomainIs(host, "lostfilm.tv")
-  )
-//    if (isInNet(myIp, "10.100.100.0", "255.255.255.0")) 
-//      return "PROXY 10.100.100.41:1080";
-//    else
-//      return "PROXY 127.0.0.1:10809";
+var directConnection = "DIRECT"; 
+var proxy = "PROXY 10.100.100.41:1080";
+var myIp = myIpAddress();
 
-  return "DIRECT";
+// Настройки для разблокировки сервисов
+var unblockServices = {
+    youtube: {
+        domains: [
+            "youtube.com", "ytimg.com", "youtu.be"
+        ],
+        patterns: [
+            "*youtube.com/get_video_info*",
+            "*youtube.com/api/timedtext*",
+            "*youtube.com/watch*",
+            "*redirector.googlevideo.com*",
+            "*googlevideo.com*"
+        ],
+        allowedIPs: []
+    },
+    kinozal: {
+        domains: [
+            "kinozal.tv"
+        ],
+        patterns: [],
+        allowedIPs: []        
+    },
+    rutracker: {
+        domains: [
+            "rutracker.org"
+        ],
+        patterns: [],
+        allowedIPs: []
+    },    
+    lostfilm: {
+        domains: [
+            "lostfilm.tv"
+        ],
+        patterns: [],
+        allowedIPs: []
+    },        
+    // name: {
+    //     domains: [],
+    //     patterns: [],
+    //     allowedIPs: []
+    // },    
+};
+
+// Проверка доменов и шаблонов
+function matchesServicePatterns(url, host) {
+    for (var service in unblockServices) {
+        var serviceData = unblockServices[service];
+        
+        // Проверка доменов
+        for (var i = 0; i < serviceData.domains.length; i++) {
+            if (dnsDomainIs(host, serviceData.domains[i]) || shExpMatch(host, "*." + serviceData.domains[i])) {
+                return true;
+            }
+        }
+        
+        // Проверка URL-шаблонов
+        for (var j = 0; j < serviceData.patterns.length; j++) {
+            if (shExpMatch(url, serviceData.patterns[j])) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+
+// Основная функция для определения прокси
+function FindProxyForURL(url, host) {
+    if (isInNet(myIp, "10.100.100.0", "255.255.255.0")) 
+        return "PROXY 10.100.100.41:1080";
+    // Проверка доменов и шаблонов
+    if (
+        matchesServicePatterns(url, host) && 
+        (
+            isInNet(myIp, "10.100.100.0", "255.255.255.0") || 
+            isInNet(myIp, "192.168.1.0.0", "255.255.255.0")
+        )
+    ) {
+        return proxy;
+    }
+
+    // Если ни одно условие не подошло - прямое соединение
+    return directConnection;
 }
