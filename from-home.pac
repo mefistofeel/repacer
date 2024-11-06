@@ -71,8 +71,6 @@ function matchesServicePatterns(url, host) {
 
 // Основная функция для определения прокси
 function FindProxyForURL(url, host) {
-    if (isInNet(myIp, "10.100.100.0", "255.255.255.0")) 
-        return "PROXY 10.100.100.41:1080";
     // Проверка доменов и шаблонов
     if (
         matchesServicePatterns(url, host) && 
