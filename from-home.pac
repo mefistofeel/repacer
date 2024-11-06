@@ -71,7 +71,7 @@ function FindProxyForURL(url, host) {
         matchesServicePatterns(url, host) && 
         (
             isInNet(myIp, "10.100.100.0", "255.255.255.0") || 
-            isInNet(myIp, "192.168.1.0.0", "255.255.255.0")
+            isInNet(myIp, "192.168.1.0", "255.255.255.0")
         )
     ) {
         return proxy;
