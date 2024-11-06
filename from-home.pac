@@ -2,7 +2,6 @@ var directConnection = "DIRECT";
 var proxy = "PROXY 10.100.100.41:1080";
 var myIp = myIpAddress();
 
-// Настройки для разблокировки сервисов
 var unblockServices = {
     youtube: {
         domains: [
@@ -26,7 +25,8 @@ var unblockServices = {
     },
     rutracker: {
         domains: [
-            "rutracker.org"
+            "rutracker.org",
+            "rutracker.cc"
         ],
         patterns: [],
         allowedIPs: []
@@ -45,19 +45,16 @@ var unblockServices = {
     // },    
 };
 
-// Проверка доменов и шаблонов
 function matchesServicePatterns(url, host) {
     for (var service in unblockServices) {
         var serviceData = unblockServices[service];
         
-        // Проверка доменов
         for (var i = 0; i < serviceData.domains.length; i++) {
             if (dnsDomainIs(host, serviceData.domains[i]) || shExpMatch(host, "*." + serviceData.domains[i])) {
                 return true;
             }
         }
         
-        // Проверка URL-шаблонов
         for (var j = 0; j < serviceData.patterns.length; j++) {
             if (shExpMatch(url, serviceData.patterns[j])) {
                 return true;
@@ -69,9 +66,7 @@ function matchesServicePatterns(url, host) {
 
 
 
-// Основная функция для определения прокси
 function FindProxyForURL(url, host) {
-    // Проверка доменов и шаблонов
     if (
         matchesServicePatterns(url, host) && 
         (
@@ -81,7 +76,5 @@ function FindProxyForURL(url, host) {
     ) {
         return proxy;
     }
-
-    // Если ни одно условие не подошло - прямое соединение
     return directConnection;
 }
