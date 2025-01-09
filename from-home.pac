@@ -1,5 +1,5 @@
 var directConnection = "DIRECT"; 
-var proxy = "PROXY 10.100.100.41:1080";
+var proxy = "PROXY 10.100.100.202:1080";
 var myIp = myIpAddress();
 
 var unblockServices = {
